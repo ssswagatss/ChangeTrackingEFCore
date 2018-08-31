@@ -18,7 +18,7 @@ namespace ChangeTrackingEF.Model
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=LAPTOP-0C861JC5;Initial Catalog=ChangeTrackerDB;User ID=sa;Password=mkr5htgi; MultipleActiveResultSets=True");
+            optionsBuilder.UseSqlServer(@"Data Source=SWAGATS8;Initial Catalog=ChangeTrackerDB;User ID=sa;Password=mindfire; MultipleActiveResultSets=True");
         }
 
         public override int SaveChanges()
@@ -30,7 +30,8 @@ namespace ChangeTrackingEF.Model
                                 (x.State == EntityState.Added || x.State == EntityState.Modified));
 
                 var addedChangeLogs = new List<ChangeLog>();
-
+                var auditableProperties = GetAuditableProperties();
+                Guid batchId = Guid.NewGuid();
                 foreach (var entry in modifiedEntries)
                 {
                     var entity = entry.Entity as IAuditable;
@@ -55,7 +56,6 @@ namespace ChangeTrackingEF.Model
 
                             var entityName = entry.Metadata.Name;
                             var primaryKey = GetPrimaryKeyValue(entry);
-                            var auditableProperties = GetAuditableProperties();
                             foreach (var prop in entry.OriginalValues.Properties.Where(x=>!auditableProperties.Contains(x.Name)))
                             {
                                 var originalValue = entry.OriginalValues[prop].ToString();
@@ -70,7 +70,8 @@ namespace ChangeTrackingEF.Model
                                         OldValue = originalValue,
                                         NewValue = currentValue,
                                         CreatedBy=userId,
-                                        CreatedDate= now
+                                        CreatedDate= now,
+                                        BatchId= batchId
                                     };
                                     addedChangeLogs.Add(log);
                                 }
@@ -82,7 +83,6 @@ namespace ChangeTrackingEF.Model
                 {
                     ChangeLogs.AddRange(addedChangeLogs);
                 }
-
 
                 return base.SaveChanges();
             }

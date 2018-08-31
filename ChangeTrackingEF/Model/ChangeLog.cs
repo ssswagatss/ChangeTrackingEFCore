@@ -16,5 +16,6 @@ namespace ChangeTrackingEF.Model
         public string NewValue { get; set; }
         public DateTime CreatedDate { get; set; }
         public int CreatedBy { get; set; }
+        public Guid BatchId { get; set; }
     }
 }
