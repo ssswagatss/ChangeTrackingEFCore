@@ -54,7 +54,6 @@ namespace ChangeTrackingEF
                 }
             }
 
-
             var groupedHistories = postHistories.GroupBy(x => x.BatchId).Select(x => new
             {
                 BatchId = x.Key,
@@ -69,21 +68,12 @@ namespace ChangeTrackingEF
                 foreach (var h in gh.Histories)
                 {
                     PropertyInfo propertyInfo = tempPost.GetType().GetProperty(h.PropertyName);
-                    propertyInfo.SetValue(tempPost, Convert.ChangeType(h.NewValue, propertyInfo.PropertyType), null);
+                    Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
+                    object safeValue = (h.OldValue == null) ? null : Convert.ChangeType(h.OldValue, t);
+                    propertyInfo.SetValue(tempPost, safeValue, null);
                 }
                 result.Add(tempPost);
                 tempPost = tempPost.Clone();
-
-                //IF the last entity, then build the first object
-                if (gh.Equals(lastgroup))
-                {
-                    foreach (var h in gh.Histories)
-                    {
-                        PropertyInfo propertyInfo = tempPost.GetType().GetProperty(h.PropertyName);
-                        propertyInfo.SetValue(tempPost, Convert.ChangeType(h.OldValue, propertyInfo.PropertyType), null);
-                    }
-                    result.Add(tempPost);
-                }
             }
             return result;
         }
@@ -121,6 +111,9 @@ namespace ChangeTrackingEF
                     {
                         y.Content = "7";
                         y.Title = "5";
+                        y.AuthorDOB = DateTime.Now;
+                        y.CreatedYear = 2000;
+                        y.CreatedMonth = 23;
                     });
                 });
                 db.SaveChanges();
