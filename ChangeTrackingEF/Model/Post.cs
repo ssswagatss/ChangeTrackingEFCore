@@ -15,6 +15,12 @@ namespace ChangeTrackingEF.Model
         public int PostId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+
+        public int CreatedYear { get; set; }
+        public int? CreatedMonth { get; set; }
+
+        public DateTime? AuthorDOB { get; set; }
+
         public int BlogId { get; set; }
         [ForeignKey("BlogId")]
         public Blog Blog { get; set; }

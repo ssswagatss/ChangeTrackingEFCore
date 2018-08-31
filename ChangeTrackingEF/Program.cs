@@ -19,13 +19,14 @@ namespace ChangeTrackingEF
 
             foreach (var p in posts)
             {
-                Console.WriteLine($"Post Title = {p.Title} - Post Content = {p.Content}");
+                Console.WriteLine($"Post Title = {p.Title} \nPost Content = {p.Content} \nDOB-{p.AuthorDOB} \nYear-{p.CreatedYear} \nMonth-{p.CreatedMonth} ");
+                Console.WriteLine("---------------------------------------------------------");
             }
-
+            
+            //Console.WriteLine($"Blog - {blog.Url} - Rating - {blog.Rating}");
             Console.WriteLine("Press any key to exit . . .");
             Console.ReadKey();
         }
-
         private static Post GetPost(int postId)
         {
             Post post = null;

@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Remove="Migrations\20180831025057_First.cs" />
     <Compile Remove="Migrations\20180831040816_RemovesAuditable.cs" />
+    <Compile Remove="Migrations\20180831103056_Adds_Morefields.cs" />
   </ItemGroup>
 
   <ItemGroup>

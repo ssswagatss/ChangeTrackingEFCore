@@ -58,8 +58,8 @@ namespace ChangeTrackingEF.Model
                             var primaryKey = GetPrimaryKeyValue(entry);
                             foreach (var prop in entry.OriginalValues.Properties.Where(x=>!auditableProperties.Contains(x.Name)))
                             {
-                                var originalValue = entry.OriginalValues[prop].ToString();
-                                var currentValue = entry.CurrentValues[prop].ToString();
+                                var originalValue = entry.OriginalValues[prop]?.ToString();
+                                var currentValue = entry.CurrentValues[prop]?.ToString();
                                 if (originalValue != currentValue)
                                 {
                                     ChangeLog log = new ChangeLog()
