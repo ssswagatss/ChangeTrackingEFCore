@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ChangeTrackingEF.Model
 {
-    public class Blog : Auditable<Blog>
+    public class Blog : Auditable<Blog>, ITrackable
     {
         public Blog()
         {

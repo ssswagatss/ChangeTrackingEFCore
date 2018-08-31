@@ -86,7 +86,7 @@ namespace ChangeTrackingEF
                 result.Add(tempPost);
                 tempPost = tempPost.Clone();
             }
-            result.Insert(0,entity);
+            result.Insert(0, entity);
             return result;
         }
 
@@ -125,7 +125,12 @@ namespace ChangeTrackingEF
                 var blogs = db.Blogs.Include(x => x.Posts).ToList();
                 blogs.ForEach(x =>
                 {
-                    x.Rating = 159;
+                    x.Rating = 170;
+                    x.Posts.ForEach(y =>
+                    {
+                        y.Content = y.Content + DateTime.Now.ToString();
+                    });
+                    db.Entry(x).State = EntityState.Modified;
                 });
                 db.SaveChanges();
             }

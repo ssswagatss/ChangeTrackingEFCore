@@ -54,26 +54,31 @@ namespace ChangeTrackingEF.Model
                             entity.UpdatedDate = now;
 
 
-                            var entityName = entry.Metadata.Name;
-                            var primaryKey = GetPrimaryKeyValue(entry);
-                            foreach (var prop in entry.OriginalValues.Properties.Where(x=>!auditableProperties.Contains(x.Name)))
+                            //Log The Entity Details
+
+                            if(entry.Entity is ITrackable)
                             {
-                                var originalValue = entry.OriginalValues[prop]?.ToString();
-                                var currentValue = entry.CurrentValues[prop]?.ToString();
-                                if (originalValue != currentValue)
+                                var entityName = entry.Metadata.Name;
+                                var primaryKey = GetPrimaryKeyValue(entry);
+                                foreach (var prop in entry.OriginalValues.Properties.Where(x => !auditableProperties.Contains(x.Name)))
                                 {
-                                    ChangeLog log = new ChangeLog()
+                                    var originalValue = entry.OriginalValues[prop]?.ToString();
+                                    var currentValue = entry.CurrentValues[prop]?.ToString();
+                                    if (originalValue != currentValue)
                                     {
-                                        EntityName = entityName,
-                                        PrimaryKeyValue = primaryKey.ToString(),
-                                        PropertyName = prop.Name,
-                                        OldValue = originalValue,
-                                        NewValue = currentValue,
-                                        CreatedBy=userId,
-                                        CreatedDate= now,
-                                        BatchId= batchId
-                                    };
-                                    addedChangeLogs.Add(log);
+                                        ChangeLog log = new ChangeLog()
+                                        {
+                                            EntityName = entityName,
+                                            PrimaryKeyValue = primaryKey.ToString(),
+                                            PropertyName = prop.Name,
+                                            OldValue = originalValue,
+                                            NewValue = currentValue,
+                                            CreatedBy = userId,
+                                            CreatedDate = now,
+                                            BatchId = batchId
+                                        };
+                                        addedChangeLogs.Add(log);
+                                    }
                                 }
                             }
                         }
