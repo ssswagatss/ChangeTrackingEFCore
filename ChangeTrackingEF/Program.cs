@@ -13,10 +13,8 @@ namespace ChangeTrackingEF
     {
         static void Main(string[] args)
         {
-            //AddEntity();
-
-            //UpdateBlogAndTheirPost();
-
+            AddEntity();
+            UpdateBlogAndTheirPost();
             var posts = GetHistory(GetPost(3));
             foreach (var p in posts)
             {
@@ -31,9 +29,6 @@ namespace ChangeTrackingEF
                 Console.WriteLine($"URL - {b.Url} \nRating - {b.Rating}");
                 Console.WriteLine("-------------------------------------------");
             }
-
-            ////Console.WriteLine($"Blog - {blog.Url} - Rating - {blog.Rating}");
-
             Console.WriteLine("Press any key to exit . . .");
             Console.ReadKey();
 
@@ -78,7 +73,6 @@ namespace ChangeTrackingEF
             }).ToList();
 
             var tempPost = entity.Clone();
-            //var lastgroup = groupedHistories.Last();
 
             foreach (var gh in groupedHistories)
             {
@@ -135,10 +129,6 @@ namespace ChangeTrackingEF
                 });
                 db.SaveChanges();
             }
-        }
-        private static void UpdateBlog()
-        {
-
         }
     }
     public static class Extensions
